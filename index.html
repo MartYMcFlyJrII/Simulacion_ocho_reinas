@@ -39,7 +39,7 @@
             font-size: xx-large;
         }
                 
-        /* CSS */
+        /* CSS  )zm)7V@s2Tz^5$$ptbAv*/
         .button-52 {
           font-size: 22px;
           font-weight: 200;
@@ -90,44 +90,82 @@
     
     <script>
         var contador=0;
-        var reinas_guardadas = []
+        var board = Array.from(Array(8), () => new Array(2));
+        createBoard(board)
+        function createBoard(array){
+            for(let i=0; i<8;i++){
+                for(let j=0; j<8;j++){
+                    array[i][j]=0;
+                }
+            }
+        }
+        
         function celdaclick(ana){
             //Este if valida si la celda tiene imagen de fondo o no
             if((window.getComputedStyle(ana).backgroundImage)=="none" ) {
-                if(contador != 8){
-                    contador++; 
-                    storeCoordinate(ana.cellIndex, ana.parentNode.rowIndex, reinas_guardadas)
+                if(contador != 8 && storeCoordinate(ana.parentNode.rowIndex,ana.cellIndex, board)==true){
                     ana.style="background-image:url(./2x1.png); background-size: cover;";
-                    
+                    contador++; 
+                    if(contador == 8){
+                        alert("Felicidadesss Ganaste, encontraste una de las 92 soluciones");
+                    }
+        
                 } 
+                
                 
             }
             else {
                 contador--;
-                removeCoordinate(ana.cellIndex,ana.parentNode.rowIndex, reinas_guardadas)
+                removeCoordinate(ana.parentNode.rowIndex,ana.cellIndex, board)
                 ana.style="background-image:none;";
             }
             document.getElementById("div_contador").innerHTML="Reinas Colocadas: "+ contador;
         }
 
-        function storeCoordinate(xVal, yVal, array) {
-            array.push({x: xVal, y: yVal});
+        function storeCoordinate(xVal, yVal, array) {     
+            if(atacando(xVal, yVal, array) == false && array[xVal][yVal]== 0){
+                array[xVal][yVal]=1
+                return true
+            }
+            else{
+                return false
+            }
+            
+        }
+        function atacando(xVal, yVal, array){
+            for(let i = 0; i<8; i++){
+                if(array[i][yVal]==1){
+                    console.log("Te estan atacando")
+                    return true
+                }
+                
+                for(let j = 0; j<8; j++){
+                    if((i-xVal)==(j-yVal) || (i-xVal)== -(j-yVal)){ //diagonales
+                        
+                        if(array[i][j]==1){
+                            console.log("Te estan atacando")
+                            return true
+                        }
+                    }
+                    if(array[xVal][j]==1){
+                        console.log("Te estan atacando")
+                            return true
+                    }
+                    
+                }
+            }
+            return false
         }
 
+        
         function removeCoordinate(xVal, yVal, array) {
-            // If the value at the current array index matches the specified value (2)
-            for(let i = 0; i<9; i++){
-               if (array[i].x === xVal && array[i].y === yVal) {
-                array.splice(i, i);
-                return true;
-                }
-                return false; 
-            }
- 
+            array[xVal][yVal]=0
         }
-        function mostrarArray(){
-            for(let i = 0; i<9; i++){
-                console.log("("+reinas_guardadas[i].x+","+reinas_guardadas[i].y+")")
+        
+
+        function mostrarBoard(){
+            for(let i = 0; i<8; i++){
+                console.log(board[i])
              }
         }
 
@@ -142,9 +180,10 @@
             
             
         }
+        function ataque_reina(){
 
-        
-
+        }
+    
         function reiniciar(cont){
             var celdas=document.getElementById("tabla_ajedrez").getElementsByTagName("td");
             for (let i = 0; i < celdas.length; i++) {
@@ -152,6 +191,7 @@
             }
             contador = cont;
             document.getElementById("div_contador").innerHTML="Reinas Colocadas: "+ contador;
+            createBoard(board);
         }
 
         function solucion1(){
@@ -294,6 +334,9 @@
         </button>
         <button class="button-52" onclick="solucion2()">
             Solución 2
+        </button>
+        <button class="button-52" onclick="mostrarBoard()">
+            Mostrar tablero
         </button>
         
     </div>
