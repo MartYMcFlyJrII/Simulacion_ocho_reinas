@@ -102,13 +102,17 @@
         
         function celdaclick(ana){
             //Este if valida si la celda tiene imagen de fondo o no
+            if(contador==8){
+                alert("Felicidadesss Ganaste, encontraste una de las 92 soluciones");
+            }
             if((window.getComputedStyle(ana).backgroundImage)=="none" ) {
                 if(contador != 8 && storeCoordinate(ana.parentNode.rowIndex,ana.cellIndex, board)==true){
                     ana.style="background-image:url(./2x1.png); background-size: cover;";
-                    contador++; 
-                    if(contador == 8){
-                        alert("Felicidadesss Ganaste, encontraste una de las 92 soluciones");
+                    if(contador != 8){
+                        contador++;                        
                     }
+                     
+                    
         
                 } 
                 
@@ -120,6 +124,7 @@
                 ana.style="background-image:none;";
             }
             document.getElementById("div_contador").innerHTML="Reinas Colocadas: "+ contador;
+            
         }
 
         function storeCoordinate(xVal, yVal, array) {     
@@ -134,7 +139,7 @@
         }
         function atacando(xVal, yVal, array){
             for(let i = 0; i<8; i++){
-                if(array[i][yVal]==1){
+                if(array[i][yVal]==1){ // columnas
                     console.log("Te estan atacando")
                     return true
                 }
@@ -147,7 +152,7 @@
                             return true
                         }
                     }
-                    if(array[xVal][j]==1){
+                    if(array[xVal][j]==1){ // columnas
                         console.log("Te estan atacando")
                             return true
                     }
@@ -180,9 +185,7 @@
             
             
         }
-        function ataque_reina(){
-
-        }
+        
     
         function reiniciar(cont){
             var celdas=document.getElementById("tabla_ajedrez").getElementsByTagName("td");
